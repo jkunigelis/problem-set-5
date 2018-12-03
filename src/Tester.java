@@ -13,8 +13,8 @@ public class Tester extends ATM {
 	 * 
 	 * @param args
 	 */
-	public Tester(FileReader fr, BufferedReader br, BufferedWriter writer, float balance, long accountNum, float withdraw, float deposit, int pin, String DOB, int phoneNum, String fName, String lName, String address, String city, String state, int zipCode) {
-		super(fr, br, writer, balance, accountNum, withdraw, deposit, pin, DOB, phoneNum, fName, lName, address, city, state, zipCode);
+	public Tester(String[] accounts, FileReader fr, BufferedReader br, BufferedWriter writer, float balance, long accountNum, float withdraw, float deposit, int pin, String DOB, int phoneNum, String fName, String lName, String address, String city, String state, int zipCode) {
+		super(accounts, fr, br, writer, balance, accountNum, withdraw, deposit, pin, DOB, phoneNum, fName, lName, address, city, state, zipCode);
 	}
 	public static void main(String[] args) {
 		/*

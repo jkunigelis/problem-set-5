@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * This class will serve as the intermediary between our ATM program and
@@ -14,11 +15,12 @@ import java.io.IOException;
 
 
 public class Database extends BankAccount {
+	private static String[] accounts;
 	private static FileReader fr = null;
 	private static BufferedReader br = null;
-	private static BufferedWriter writer;
+	private static BufferedWriter writer = null;
 	
-	public Database(FileReader fr, BufferedReader br, BufferedWriter writer, float balance, long accountNum, float withdraw, float deposit, int pin, String DOB, int phoneNum, String lName, String fName, String address, String city, String state, int zipCode) {
+	public Database(String[] accounts, FileReader fr, BufferedReader br, BufferedWriter writer, float balance, long accountNum, float withdraw, float deposit, int pin, String DOB, int phoneNum, String lName, String fName, String address, String city, String state, int zipCode) {
 		super(balance, accountNum, withdraw, deposit, pin, DOB, phoneNum, fName, lName, address, city, state, zipCode);
 	}
 	
@@ -51,23 +53,26 @@ public class Database extends BankAccount {
 			int newPin = in.nextInt();
 			if (User.checkPin(newPin) == true) {
 				try {
-					writer = new BufferedWriter(new FileWriter("temp.txt"));
-					writer.write("text");
-					/*fr = new FileReader("accounts-db.txt");
+					fr = new FileReader("src\\accounts-db.txt");
+					writer = new BufferedWriter(new FileWriter("src\\accounts-db.txt"));
 					br = new BufferedReader(fr);
 					String line;
 					while(br.ready() == true) {
 						line = br.readLine();
-						writer.write(line);
 						if (line.contains(User.getLName())) {
-							String output = Long.toString(Database.getAccountNum(User.getLName())) + Integer.toString(newPin) + Float.toString(BankAccount.getBalance()) + Database.getName(Database.getAccountNum(User.getLName())) + Database.getUnformattedDOB() + Database.getUnformattedPhoneNum() + Database.getAddress();
-							String output = line.substring(0, 9) + Integer.toString(newPin) + line.substring(13, 146);
-							writer.write(output);
+									// alternative?
+							// String output = Long.toString(Database.getAccountNum(User.getLName())) + Integer.toString(newPin) + Float.toString(BankAccount.getBalance()) + Database.getName(Database.getAccountNum(User.getLName())) + Database.getUnformattedDOB() + Database.getUnformattedPhoneNum() + Database.getAddress();
+							// String output = line.substring(0, 9) + Integer.toString(newPin) + line.substring(13, 146);
+							// writer.write(output);
+							for (String acct : accounts) {
+								writer.write(acct);
+								writer.newLine();
+							}
 						}
 						else {
-							
+							writer.write(line);
 						} 
-					}*/
+					}
 				}
 				catch (FileNotFoundException e) {
 					System.out.println("File not found.");
@@ -119,13 +124,13 @@ public class Database extends BankAccount {
 	public static String getAddress() {
 		String tempAddress = null;
 		try {
-			fr = new FileReader("accounts-db.txt");
+			fr = new FileReader("src\\accounts-db.txt");
 			br = new BufferedReader(fr);
 			String line;
 			while(br.ready() == true) {
 				line = br.readLine();
 				if (line.contains(User.getLName())) {
-					tempAddress = line.substring(78, 145);
+					tempAddress = line.substring(81, 148);
 				}
 			}
 		}
@@ -163,7 +168,7 @@ public class Database extends BankAccount {
 	public static String getPinForUp() {
 		String tempPin = null;
 		try {
-			fr = new FileReader("accounts-db.txt");
+			fr = new FileReader("src\\accounts-db.txt");
 			br = new BufferedReader(fr);
 			String line;
 			while(br.ready() == true) {
@@ -207,13 +212,13 @@ public class Database extends BankAccount {
 	public static String getPhoneNum() {
 		String tempPhone = null;
 		try {
-			fr = new FileReader("accounts-db.txt");
+			fr = new FileReader("src\\accounts-db.txt");
 			br = new BufferedReader(fr);
 			String line;
 			while(br.ready() == true) {
 				line = br.readLine();
 				if (line.contains(User.getLName())) {
-					tempPhone = line.substring(68, 71) + "-" + line.substring(71, 74) + "-" + line.substring(74, 78);
+					tempPhone = line.substring(71, 74) + "-" + line.substring(74, 77) + "-" + line.substring(77, 81);
 				}
 			}
 		}
@@ -251,13 +256,13 @@ public class Database extends BankAccount {
 	public static String getUnformattedPhoneNum() {
 		String tempPhone = null;
 		try {
-			fr = new FileReader("accounts-db.txt");
+			fr = new FileReader("src\\accounts-db.txt");
 			br = new BufferedReader(fr);
 			String line;
 			while(br.ready() == true) {
 				line = br.readLine();
 				if (line.contains(User.getLName())) {
-					tempPhone = line.substring(68, 78);
+					tempPhone = line.substring(71, 81);
 				}
 			}
 		}
@@ -295,13 +300,13 @@ public class Database extends BankAccount {
 	public static String getDOB() {
 		String tempDOB = null;
 		try {
-			fr = new FileReader("accounts-db.txt");
+			fr = new FileReader("src\\accounts-db.txt");
 			br = new BufferedReader(fr);
 			String line;
 			while(br.ready() == true) {
 				line = br.readLine();
 				if (line.contains(User.getLName())) {
-					tempDOB = line.substring(64, 66) + "-" + line.substring(66, 68) + "-" + line.substring(60, 64);
+					tempDOB = line.substring(67, 69) + "-" + line.substring(69, 71) + "-" + line.substring(63, 67);
 				}
 			}
 		}
@@ -339,13 +344,13 @@ public class Database extends BankAccount {
 	public static String getUnformattedDOB() {
 		String tempDOB = null;
 		try {
-			fr = new FileReader("accounts-db.txt");
+			fr = new FileReader("src\\accounts-db.txt");
 			br = new BufferedReader(fr);
 			String line;
 			while(br.ready() == true) {
 				line = br.readLine();
 				if (line.contains(User.getLName())) {
-					tempDOB = line.substring(60, 64) + line.substring(64, 66) + line.substring(66, 68);
+					tempDOB = line.substring(63, 67) + line.substring(67, 69) + line.substring(69, 71);
 				}
 			}
 		}
@@ -383,7 +388,7 @@ public class Database extends BankAccount {
 	public static boolean checkPin(String str, int x) {
 		int count = 0;
 		try {
-			fr = new FileReader("accounts-db.txt");
+			fr = new FileReader("src\\accounts-db.txt");
 			br = new BufferedReader(fr);
 			String line;
 			while(br.ready() == true) {
@@ -429,7 +434,7 @@ public class Database extends BankAccount {
 	public static boolean checkAccountNum(String str, long x) {
 		int count = 0;
 		try {
-			fr = new FileReader("accounts-db.txt");
+			fr = new FileReader("src\\accounts-db.txt");
 			br = new BufferedReader(fr);
 			String line;
 			while(br.ready() == true) {
@@ -474,16 +479,16 @@ public class Database extends BankAccount {
 	}
 	public static String getName(long x) {
 		// x being accountNum
-		// returns LName
+		// returns name
 		String name = null;
 				try {
-					fr = new FileReader("accounts-db.txt");
+					fr = new FileReader("src\\accounts-db.txt");
 					br = new BufferedReader(fr);
 					String line;
 					while(br.ready() == true) {
 						line = br.readLine();
 						if (Long.parseLong(line.substring(0, 9)) == x) {
-							name = line.substring(28, 49);
+							name = line.substring(48, 63) + " " + line.substring(28, 48);
 						}
 					}
 				}
@@ -523,7 +528,7 @@ public class Database extends BankAccount {
 		int count = 0;
 		long num = 0;
 				try {
-					fr = new FileReader("accounts-db.txt");
+					fr = new FileReader("src\\accounts-db.txt");
 					br = new BufferedReader(fr);
 					String line;
 					while(br.ready() == true) {
@@ -601,12 +606,12 @@ public class Database extends BankAccount {
 	public static boolean checkAccountNumTrans(long x) {
 		int count = 0;
 		try {
-			fr = new FileReader("accounts-db.txt");
+			fr = new FileReader("src\\accounts-db.txt");
 			br = new BufferedReader(fr);
 			String line;
 			while(br.ready() == true) {
 				line = br.readLine();
-				if (line.substring(0, 9).equals(String.valueOf(x))) {
+				if (line.substring(0, 9).equals(String.valueOf(x)) && line.endsWith("Y")) {
 						count++;
 				}
 			}
@@ -644,7 +649,7 @@ public class Database extends BankAccount {
 	}
 	public static void getOriginalBalance(String str, long x) {
 		try {
-			fr = new FileReader("accounts-db.txt");
+			fr = new FileReader("src\\accounts-db.txt");
 			br = new BufferedReader(fr);
 			String line;
 			while(br.ready() == true) {
@@ -682,7 +687,7 @@ public class Database extends BankAccount {
 	/* public static void setBalance(String str) {
 		// str being the last name of the person
 		try {
-			fr = new FileReader("accounts-db.txt");
+			fr = new FileReader("src\\accounts-db.txt");
 			br = new BufferedReader(fr);
 			String line;
 			while(br.ready() == true) {
@@ -717,12 +722,19 @@ public class Database extends BankAccount {
 		
 	} */
 	public static void printFile() {
+		int count = 0;
+		String[] accounts = new String[10];
 		try {
-			fr = new FileReader("accounts-db.txt");
+			String line = null;
+			fr = new FileReader("src\\accounts-db.txt");
 			br = new BufferedReader(fr);
 			while(br.ready() == true) {
 				// print line
-				System.out.println(br.readLine());
+				if (count >= accounts.length) {
+					accounts = Arrays.copyOf(accounts, accounts.length + 10);
+				}
+				accounts[count++] = line;
+				br.readLine();
 			}
 		}
 		catch (FileNotFoundException e) {

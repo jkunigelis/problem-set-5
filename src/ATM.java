@@ -17,8 +17,8 @@ import java.io.BufferedWriter;
 
 public class ATM extends Database{
 	
-	public ATM(FileReader fr, BufferedReader br, BufferedWriter writer, float balance, long accountNum, float withdraw, float deposit, int pin, String DOB, int phoneNum, String fName, String lName, String address, String city, String state, int zipCode) {
-		super(fr, br, writer, balance, accountNum, withdraw, deposit, pin, DOB, phoneNum, fName, lName, address, city, state, zipCode);
+	public ATM(String[] accounts, FileReader fr, BufferedReader br, BufferedWriter writer, float balance, long accountNum, float withdraw, float deposit, int pin, String DOB, int phoneNum, String fName, String lName, String address, String city, String state, int zipCode) {
+		super(accounts, fr, br, writer, balance, accountNum, withdraw, deposit, pin, DOB, phoneNum, fName, lName, address, city, state, zipCode);
 	}
 
 	private static Scanner in = new Scanner(System.in);
@@ -51,6 +51,7 @@ public class ATM extends Database{
 				char choice = 'z';
 
 				in.nextLine();
+				Database.printFile();
 				
 				while(choice != 'e') {
 					System.out.println("\nEnter 'd' to deposit. Enter 'w' to withdraw. Enter 'b' to show balance. Enter 't' to transfer.\nEnter 'p' to view personal info. Enter 'u' to update info. Enter 'e' to exit.");
