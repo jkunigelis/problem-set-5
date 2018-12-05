@@ -15,13 +15,17 @@ import java.util.Arrays;
 
 
 public class Database extends BankAccount {
-	private static String[] accounts;
+	private static String[] accounts = null;
 	private static FileReader fr = null;
 	private static BufferedReader br = null;
 	private static BufferedWriter writer = null;
 	
 	public Database(String[] accounts, FileReader fr, BufferedReader br, BufferedWriter writer, float balance, long accountNum, float withdraw, float deposit, int pin, String DOB, int phoneNum, String lName, String fName, String address, String city, String state, int zipCode) {
 		super(balance, accountNum, withdraw, deposit, pin, DOB, phoneNum, fName, lName, address, city, state, zipCode);
+		Database.accounts = accounts;
+		Database.fr = fr;
+		Database.br = br;
+		Database.writer = writer;
 	}
 	
 	
@@ -45,6 +49,7 @@ public class Database extends BankAccount {
 		}
 	}
 	public static void updatePin() {
+		int count = 0;
 		System.out.println("Please enter current pin.");
 		int temp3 = in.nextInt();
 		boolean isValid = Database.checkPin(User.getLName(), temp3);
@@ -54,7 +59,6 @@ public class Database extends BankAccount {
 			if (User.checkPin(newPin) == true) {
 				try {
 					fr = new FileReader("src\\accounts-db.txt");
-					writer = new BufferedWriter(new FileWriter("src\\accounts-db.txt"));
 					br = new BufferedReader(fr);
 					String line;
 					while(br.ready() == true) {
@@ -64,15 +68,24 @@ public class Database extends BankAccount {
 							// String output = Long.toString(Database.getAccountNum(User.getLName())) + Integer.toString(newPin) + Float.toString(BankAccount.getBalance()) + Database.getName(Database.getAccountNum(User.getLName())) + Database.getUnformattedDOB() + Database.getUnformattedPhoneNum() + Database.getAddress();
 							// String output = line.substring(0, 9) + Integer.toString(newPin) + line.substring(13, 146);
 							// writer.write(output);
-							for (String acct : accounts) {
-								writer.write(acct);
-								writer.newLine();
-							}
+							accounts[count] = line.substring(0, 9) + Integer.toString(newPin) + line.substring(13, (line.length() - 1));
+							
+						}
+						line = br.readLine();
+						count++;
+					}
+					writer = new BufferedWriter(new FileWriter("src\\accounts-db.txt"));
+					for(int i = 0; i < accounts.length; i++) {
+						if (i == (accounts.length - 1)) {
+							writer.write(accounts[i]);
 						}
 						else {
-							writer.write(line);
-						} 
+							writer.write(accounts[i]);
+							writer.newLine();
+						}
 					}
+					writer.flush();
+					writer.close();
 				}
 				catch (FileNotFoundException e) {
 					System.out.println("File not found.");
@@ -721,20 +734,52 @@ public class Database extends BankAccount {
 		}
 		
 	} */
-	public static void printFile() {
+	public static int countLines() {
 		int count = 0;
-		String[] accounts = new String[10];
+		try {
+			fr = new FileReader("src\\accounts-db.txt");
+			br = new BufferedReader(fr);
+			while(br.ready() == true) {
+				count++;
+				br.readLine();
+			}
+		}
+		catch (FileNotFoundException e) {
+			System.out.println("File not found.");
+		}
+		catch (IOException e) {
+			System.out.println("Cannot read file!");
+		}
+		finally {
+			if (br != null) {
+				try {
+					br.close();
+				}
+				catch (IOException e) {
+				}
+			} 
+			if (fr != null) {
+				try {
+					fr.close();
+				}
+				catch (IOException e) { 
+				}
+			}
+		}
+		return count;
+	}
+	public static void printFile() {
+		int length = Database.countLines();
+		accounts = new String[length];
 		try {
 			String line = null;
 			fr = new FileReader("src\\accounts-db.txt");
 			br = new BufferedReader(fr);
-			while(br.ready() == true) {
-				// print line
-				if (count >= accounts.length) {
-					accounts = Arrays.copyOf(accounts, accounts.length + 10);
+			for (int i = 0; i < length; i++) {
+				if (br.ready() == true) {
+					line = br.readLine();
+					accounts[i] = line;
 				}
-				accounts[count++] = line;
-				br.readLine();
 			}
 		}
 		catch (FileNotFoundException e) {
