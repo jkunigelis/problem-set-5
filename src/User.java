@@ -75,16 +75,24 @@ public class User {
 			return false;
 		}
 	}
-	public static void setName() {
-		System.out.println("Please enter name.");
+	public static boolean setName() {
+		System.out.println("Please enter full name.");
 		String name;
 		name = in.nextLine();
 		char target = ' ';
-		for(int i = 0; i < name.length(); i++) {
-			if (name.charAt(i) == target) {
-				lName = name.substring((i + 1), name.length());
-				fName = name.substring(0, i);
+		String target1 = " ";
+		if (name.contains(target1) == false) {
+			System.out.println("Please enter first and last name.");
+			return false;
+		}
+		else {
+			for(int i = 0; i < name.length(); i++) {
+				if (name.charAt(i) == target) {
+					lName = name.substring((i + 1), name.length());
+					fName = name.substring(0, i);
+				}
 			}
+			return true;
 		}
 	}
 	public static void setPin() {
