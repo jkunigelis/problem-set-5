@@ -35,10 +35,7 @@ public class BankAccount extends User {
 	
 	
 	
-	public static void transfer() {
-		
-	}
- 	public static void setDeposit() {
+ 	public static float setDeposit() {
 		System.out.println("Enter amount to deposit.");
 		deposit = in.nextFloat();
 		if (deposit < 0) {
@@ -47,8 +44,9 @@ public class BankAccount extends User {
 		else {
 			balance = balance + deposit;
 		}
+		return balance;
 	}
-	public static void setWithdraw() {
+	public static float setWithdraw() {
 		System.out.println("Enter amount to withdraw.");
 		withdraw = in.nextFloat();
 		if (withdraw < 0) {
@@ -60,20 +58,26 @@ public class BankAccount extends User {
 		else {
 			balance = balance - withdraw;
 		}
+		return balance;
 	}
-	public static void withdraw(float x) {
-		if (x < 0) {
+	public static float withdraw(float x) {
+		withdraw = x;
+		if (withdraw < 0) {
 			System.out.println("Not valid amount.");
 		}
-		else if (x > balance) {
+		else if (withdraw > balance) {
 			System.out.println("Not valid amount.");
 		}
 		else {
-			balance = balance - x;
+			balance = balance - withdraw;
 		}
+		return balance;
 	}
 	public static long getAccountNum () {
 		return accountNum;
+	}
+	public static void setAccountNum (long x) {
+		accountNum = x;
 	}
 	public static void setOriginalBalance(float f) {
 		balance = f;
