@@ -17,6 +17,7 @@ public class Tester extends ATM {
 		super(accounts, fr, br, writer, balance, accountNum, withdraw, deposit, pin, DOB, phoneNum, fName, lName, address, city, state, zipCode);
 	}
 	public static void main(String[] args) {
+		ATM.menu();
 		/*
 		 * Rather than hard coding one or more BankAccount objects, you'll need to read them in
 		 * from our very primitive database (i.e., a flat-file). After making changes, of course,
