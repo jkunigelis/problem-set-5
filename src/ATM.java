@@ -22,74 +22,72 @@ public class ATM extends Database{
 	}
 
 	private static Scanner in = new Scanner(System.in);
-	
-	public static void main(String[] args) {
-		//account
-		//validate (login)
-		//dispense
-		//menu
-		//deposit
-		//withdraw
-		//show balance
-		
-		menu();
-		in.close();
-	}
 	//menu
 	public static void menu() {
-		User.setName();
-		System.out.println("\nHello, " + getName() + ".\n");
-		System.out.println("Please enter account number.");
-		long tempNum = in.nextLong();
-		if (Database.checkAccountNum(User.getLName(), tempNum) == true) {
-			System.out.println("Please enter pin.");
-			int tempPin = in.nextInt();
-			if (Database.checkPin(User.getLName(), tempPin) == true) {
-				System.out.println("Login Success...");
-				System.out.println("\nWhat do you want to do?");
-				Database.getOriginalBalance(getLName(), tempNum);
-				char choice = 'z';
+		if (User.setName() == true) {
+			System.out.println("\nHello, " + getName() + ".\n");
+			System.out.println("Please enter account number. Enter '0' if you do not have an account.");
+			long tempNum = in.nextLong();
+			Database.printFile();
+			if (Database.checkAccountNum(User.getLName(), tempNum) == true) {
+				System.out.println("Please enter pin.");
+				int tempPin = in.nextInt();
+				if (Database.checkPin(User.getLName(), tempPin) == true) {
+					System.out.println("Login Success...");
+					System.out.println("\nWhat do you want to do?");
+					Database.getOriginalBalance(getLName(), tempNum);
+					char choice = 'z';
 
-				in.nextLine();
-				Database.printFile();
-				
-				while(choice != 'e') {
-					System.out.println("\nEnter 'd' to deposit. Enter 'w' to withdraw. Enter 'b' to show balance. Enter 't' to transfer.\nEnter 'p' to view personal info. Enter 'u' to update info. Enter 'e' to exit.");
-					String temp = in.nextLine();
-					choice = temp.charAt(0); 
-					switch (choice) {
-					case 'd':
-						BankAccount.setDeposit();
-						break;
-					case 'p':
-						Database.showInfo();
-						break;
-					case 'w':
-						BankAccount.setWithdraw();
-						break;
-					case 't':
-						Database.transfer();
-						break;
-					case 'b':
-						System.out.println(BankAccount.getBalance());
-						break;
-					case 'u':
-						Database.updateInfo();
-						break;
-					case 'e':
-						System.out.println("\nHave a good day, " + getFName() + ".");
-						break;
-					default:
-						System.out.print("Please enter valid command.");
-					} 
+					in.nextLine();
+					
+					while(choice != 'e') {
+						System.out.println("\nEnter 'd' to deposit. Enter 'w' to withdraw. Enter 'b' to show balance. Enter 't' to transfer.\nEnter 'p' to view personal info. Enter 'u' to update info. Enter 'r' to deactivate account. Enter 'e' to exit.");
+						String temp = in.nextLine();
+						choice = temp.charAt(0); 
+						switch (choice) {
+						case 'd':
+							float temp17 = BankAccount.setDeposit();
+							Database.updateWithdrawDeposit(temp17);
+							System.out.println("Success.");
+							break;
+						case 'p':
+							Database.showInfo();
+							break;
+						case 'w':
+							float temp15 = BankAccount.setWithdraw();
+							Database.updateWithdrawDeposit(temp15);
+							System.out.println("Success.");
+							break;
+						case 't':
+							Database.transfer();;
+							break;
+						case 'b':
+							System.out.println(BankAccount.getBalance());
+							break;
+						case 'u':
+							Database.updateInfo();
+							break;
+						case 'e':
+							System.out.println("\nHave a good day, " + getFName() + ".");
+							break;
+						case 'r':
+							Database.deactivate();
+							break;
+						default:
+							System.out.print("Please enter valid command.");
+						} 
+					}
+				}
+				else {
+					System.out.println("Incorrect pin. Please restart Transaction.");
 				}
 			}
-			else {
-				System.out.println("Incorrect pin. Please restart Transaction.");
+			else if (tempNum == 0) {
+				Database.createAccount();
 			}
-		}
-		else {
-			System.out.println("Name and account number do not match.");
+			else {
+				System.out.println("Name and account number do not match.");
+			}
 		}
 	}
 }
